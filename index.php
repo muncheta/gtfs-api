@@ -7,20 +7,23 @@
     //DIE
     echo "DB Error";
   }
-  $gtfs = new GTFS($con);
+  $gtfs = new GTFS($con,Conf::REALTIME_API,Conf::ATTRACTIONS_API);
   $params = explode(",",$_GET["q"]);
   switch($_GET["method"]){
     case "stops":
-      $stops = $gtfs->stops();
+      $response = $gtfs->stops();
       break;
     case "stop":
-      $stops = $gtfs->stop($params[0]);
+      $response = $gtfs->stop($params[0]);
       break;
     case "routes":
-      $stops = $gtfs->routes();
+      $response = $gtfs->routes();
       break;
     case "route":
-      $stops = $gtfs->route($params[0]);
+      $response = $gtfs->route($params[0]);
+      break;
+    case "trip_stops":
+      $response = $gtfs->trip_stops($params[0],$params[1]);
       break;
     default:
       $doc = true;
@@ -53,7 +56,8 @@
       </div>
 
       <div class="jumbotron">
-        <h1>GTFS API</h1>
+        <h1>Public Transport API</h1>
+        <p>An API that combines Adelaide Metro GTFS data, Adelaide Metro Real-Time API data and Australian Tourism Data Warehouse API data to create a single point of reference for Public Transport information.
       </div>
 
       <div class="row marketing">
@@ -65,8 +69,8 @@
 
           <h4>Single Stop</h4>
           <h3>GET /?method=stop&amp;q=&lt;stop_code&gt;</h3>
-          <p>Example: <a href="/?method=stop&q=10005">/?method=stop&amp;q=10005</a></p>
-          <p>Get stop details.</p>
+          <p>Example: <a href="/?method=stop&q=13418">/?method=stop&amp;q=13418</a></p>
+          <p>Get stop details, next real-time service and nearby attractions.</p>
 
           <h4>Routes</h4>
           <h3>GET /?method=routes</h3>
@@ -77,6 +81,11 @@
           <h3>GET /?method=route&amp;q=&lt;route_code&gt;</h3>
           <p>Example: <a href="/?method=route&q=100">/?method=route&amp;q=100</a></p>
           <p>Get route details.</p>
+
+          <h4>Trip Stops</h4>
+          <h3>GET /?method=trip_stops&amp;q=&lt;trip_id&gt;,&lt;stop_code&gt;</h3>
+          <p>Example: <a href="/?method=trip_stops&q=130795,13418">/?method=trip_stops&amp;q=&lt;trip_id&gt;,&lt;stop_code&gt;</a></p>
+          <p>List upcomming stops for a specific trip, starting from a specific stop.</p>
         </div>
       </div>
 
