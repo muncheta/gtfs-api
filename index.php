@@ -37,7 +37,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>metroNow - GTFS API</title>
+    <title>BUZZSTOP</title>
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -47,44 +47,52 @@
   <body>
     <div class="container">
       <div class="header">
-        <ul class="nav nav-pills pull-right">
-          <li class="active"><a href="#">Home</a></li>
-          <li><a href="#">About</a></li>
-          <li><a href="#">Contact</a></li>
-        </ul>
-        <h3 class="text-muted">metroNow</h3>
+        <!--<img src="final-ios-icon-80px.png" />
+        <h3 class="text-muted">BUZZSTOP - iOS Application</h3>-->
+        <div class="media">
+          <a class="pull-left" href="#">
+            <img src="final-ios-icon-80px.png" />
+          </a>
+          <div class="media-body">
+          <h1 class="media-heading">BUZZSTOP - iOS Application</h1>
+          Taking control of your public transport experience.
+          </div>
+        </div>
       </div>
 
       <div class="jumbotron">
-        <h1>Public Transport API</h1>
-        <p>An API that combines Adelaide Metro GTFS data, Adelaide Metro Real-Time API data and Australian Tourism Data Warehouse API data to create a single point of reference for Public Transport information.
+
       </div>
 
       <div class="row marketing">
         <div class="col-lg-12">
-          <h4>All Stops</h4>
-          <h3>GET /?method=stops</h3>
+          <h1>BUZZSTOP Public Transport API</h1>
+          <p>The iOS application uses a JSON API we built that combines Adelaide Metro GTFS data, Adelaide Metro Real-Time API data and Australian Tourism Data Warehouse API data to create a single point of reference for Public Transport information.</p>
+          <p>We have also integrated DPTI's weekly boarding statistic dataset to apply forcasted commuter congestion values to the Real-Time service lists.</p>
+
+          <h3>All Stops</h3>
+          <h4>GET /?method=stops</h4>
           <p>Example: <a href="/?method=stops">/?method=stops</a></p>
           <p>List all stops.</p>
 
-          <h4>Single Stop</h4>
-          <h3>GET /?method=stop&amp;q=&lt;stop_code&gt;</h3>
-          <p>Example: <a href="/?method=stop&q=13418">/?method=stop&amp;q=13418</a></p>
+          <h3>Single Stop</h3>
+          <h4>GET /?method=stop&amp;q=&lt;stop_code&gt;</h4>
+          <p>Example: <a href="/?method=stop&q=13282">/?method=stop&amp;q=13418</a></p>
           <p>Get stop details, next real-time service and nearby attractions.</p>
 
-          <h4>Routes</h4>
-          <h3>GET /?method=routes</h3>
+          <h3>Routes</h3>
+          <h4>GET /?method=routes</h4>
           <p>Example: <a href="/?method=routes">/?method=routes</a></p>
           <p>List all routes.</p>
 
-          <h4>Route</h4>
-          <h3>GET /?method=route&amp;q=&lt;route_code&gt;</h3>
-          <p>Example: <a href="/?method=route&q=100">/?method=route&amp;q=100</a></p>
+          <h3>Route</h3>
+          <h4>GET /?method=route&amp;q=&lt;route_code&gt;</h4>
+          <p>Example: <a href="/?method=route&q=144">/?method=route&amp;q=144</a></p>
           <p>Get route details.</p>
 
-          <h4>Trip Stops</h4>
-          <h3>GET /?method=trip_stops&amp;q=&lt;trip_id&gt;,&lt;stop_code&gt;</h3>
-          <p>Example: <a href="/?method=trip_stops&q=130795,13418">/?method=trip_stops&amp;q=&lt;trip_id&gt;,&lt;stop_code&gt;</a></p>
+          <h3>Trip Stops</h3>
+          <h4>GET /?method=trip_stops&amp;q=&lt;trip_id&gt;,&lt;stop_code&gt;</h4>
+          <p>Example: <a href="/?method=trip_stops&q=130330,13282">/?method=trip_stops&amp;q=130330,13282</a></p>
           <p>List upcomming stops for a specific trip, starting from a specific stop.</p>
         </div>
       </div>

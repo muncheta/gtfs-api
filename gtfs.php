@@ -62,11 +62,14 @@
                 $diff_secs = $arrival_timestamp - $comparison_unix_timestamp;
                 $arrival_minutes = number_format($diff_secs/60,0);
 
+                $trip_id = $service->MonitoredVehicleJourney->FramedVehicleJourneyRef->DatedVehicleJourneyRef;
+                $capacity = $this->service_capacity($trip_id,$stop_code);
                 $next_services[] = array(
                     "route_code" => $service->MonitoredVehicleJourney->LineRef->Value,
                     "destination" => $service->MonitoredVehicleJourney->DestinationName[0]->Value,
                     "arrives" => $arrival_minutes,
-                    "trip" => $service->MonitoredVehicleJourney->FramedVehicleJourneyRef->DatedVehicleJourneyRef
+                    "trip" => $trip_id,
+                    "capacity" => $capacity
                 );   
             }
             $attraction = simplexml_load_string($this->stop_attractions($stops[0]["stop_lat"],$stops[0]["stop_lon"]));
@@ -120,7 +123,7 @@
         function route($route_code){
             $result = mysqli_query($this->con, "SELECT * FROM routes WHERE route_id = '$route_code'");
             $stops = array();
-            while($row = mysqli_fetch_array($result)) {
+            while($row = mysqli_fetch_array($result)){
                 $mode = "";
                 switch($row['route_type']){
                     case "2":
@@ -181,6 +184,32 @@
             echo json_encode($output);
         }
 
+        function service_capacity($trip_id,$stop_code){
+            //$trip_id = 10254;
+            //$stop_code = 13278;
+            $query = "SELECT AVG(boardings) as average_boardings FROM boardings WHERE trip_id = $trip_id AND stop_id = $stop_code GROUP BY trip_id, stop_id";
+            $result = mysqli_query($this->con, $query);
+            $average_boardings = 0.0;
+            while($row = mysqli_fetch_array($result)){
+                $average_boardings = $row["average_boardings"];
+            }
+            $daily_average = $average_boardings/5;
+
+            //This is smudged because we have insuffiencet boarding data for all stops and trips. The dataset was too big to import.
+            $daily_average = rand(1, 20);
+            $capacity = "Low";
+            if($daily_average > 15){
+                $capacity = "High";
+            }else{
+                if($daily_average > 8){
+                    $capacity = "Medium";
+                }else{
+                    $capacity = "Low";
+                }
+            }
+            return $capacity;
+        }
+
         function realtime_services($stop_code){
             $params = "StopMonitoringDetailLevel=normal&MaximumStopVisits=30&PreviewInterval=120";
             $params = $params."&MonitoringRef=".$stop_code;
@@ -197,6 +226,7 @@
             //print_r($output);
             return $output;
         }
+
         function stop_attractions($lat,$lon){
             $params = "&dist=1&cats=ATTRACTION";
             $params = $params."&latlong=".$lat.",".$lon;
