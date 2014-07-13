@@ -154,7 +154,7 @@
 
         function trip_stops($trip_id, $current_stop){
             //SELECT * FROM stop_times WHERE trip_id = 81853
-            $query = "SELECT st.stop_sequence, s.* from stop_times st
+            $query = "SELECT st.stop_sequence, st.arrival_time, s.* from stop_times st
             JOIN stops s ON s.stop_id = st.stop_id
             WHERE st.trip_id = $trip_id
             ORDER BY st.stop_sequence ASC";
@@ -170,6 +170,7 @@
                     "stop_lat" => $row['stop_lat'],
                     "stop_lon" => $row['stop_lon'],
                     "wheelchair_boarding" => $row['wheelchair_boarding'],
+                    "arrival_time" => $row['arrival_time'],
                 );
                 $stops_basic[] = $row['stop_code'];
             }
@@ -178,6 +179,17 @@
             //print_r($stops_basic);
             //print_r($stop_index);
             $upcomming_stops = array_splice($stops, $stop_index);
+            $start_time = new DateTime($upcomming_stops[0]["arrival_time"]);
+            $total_minutes = 0;
+            $upcomming_stops[0]["arrival_minutes"] = $total_minutes;
+            for($i=0;$i<count($upcomming_stops);$i++){
+                $compare_time = new DateTime($upcomming_stops[$i]["arrival_time"]);
+                $interval = $start_time->diff($compare_time);
+                $minutes = $interval->format('%i');
+                $total_minutes = $total_minutes+$minutes;
+                $upcomming_stops[$i]["arrival_minutes"] = $total_minutes;
+            }
+
             //print_r($upcomming_stops);
             $output = array("stops"=>$upcomming_stops);
             header('Content-Type: application/json');
